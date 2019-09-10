@@ -6,14 +6,18 @@ public class Branch : MonoBehaviour
 {
 	[SerializeField] GameObject branch;
 	[SerializeField] Transform parent;
+	[SerializeField] bool cancelRigidbody = false;
 
 
 	// Use this for initialization
 	void Start ()
 	{
 		branch.transform.parent = parent;
-		AddBoxCollider();
-		AddRigidBody();
+		if (!cancelRigidbody)
+		{
+			AddBoxCollider();
+			AddRigidBody();
+		}
 
 	}
 	
@@ -27,14 +31,22 @@ public class Branch : MonoBehaviour
 
 	private void AddBoxCollider()
 	{
-		Collider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
-		boxCollider.isTrigger = false;
+		if (gameObject.GetComponent<BoxCollider2D>() == null)
+		{
+			Collider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
+			boxCollider.isTrigger = false;
+		}
+
 	}
 
 	private void AddRigidBody()
 	{
-		Rigidbody2D rigidBody = gameObject.AddComponent<Rigidbody2D>();
-		rigidBody.bodyType = RigidbodyType2D.Static;
-		rigidBody.simulated = true;
+		if (gameObject.GetComponent<Rigidbody2D>() == null)
+		{
+			Rigidbody2D rigidBody = gameObject.AddComponent<Rigidbody2D>();
+			rigidBody.bodyType = RigidbodyType2D.Static;
+			rigidBody.simulated = true;
+		}
 	}
+	
 }

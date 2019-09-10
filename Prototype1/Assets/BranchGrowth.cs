@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BranchGrowth : MonoBehaviour
 {
+	[SerializeField] Transform parent;
 	[SerializeField] float branchEndLength = 30f;
 	[SerializeField] float branchGrowMultiplier = 0.01f;
 
@@ -11,8 +12,10 @@ public class BranchGrowth : MonoBehaviour
 
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+	{
+		gameObject.transform.parent = parent;
+
 	}
 	
 	// Update is called once per frame
