@@ -9,15 +9,21 @@ public class Player : MonoBehaviour
 {
 	Rigidbody2D rigidBody;
 	int currentSceneIndex = 0;
+	
 	[SerializeField] int maxJumpTimes = 2;
 	[SerializeField] float jumpForce = 400f;
 	[SerializeField] float horizontalMultiplier = 200f;
 	[SerializeField] float maxSpeedX = 12f;
+	
+	[SerializeField] float playerGrowMultiplier = 1f;
+	private SpriteRenderer spriteRenderer;
 
+	
 	private float velocityLastFrame;
+
 	enum State
 	{
-		Alive, Dying
+		Alive, Dead
 	}
 	State state = State.Alive;
 	
@@ -26,6 +32,8 @@ public class Player : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+
+		spriteRenderer = GetComponent<SpriteRenderer>();
 		rigidBody = GetComponent<Rigidbody2D>();
 		
 
@@ -47,6 +55,14 @@ public class Player : MonoBehaviour
 		{
 			ReloadLevel();
 		}
+
+		if (gameObject.transform.localScale.x < 1)
+		{
+			gameObject.transform.localScale += new Vector3(1f,1f,1f) * playerGrowMultiplier * Time.deltaTime;
+		}
+
+		
+
 	}
 
 	void RespondToDebugKeys()
@@ -125,4 +141,13 @@ public class Player : MonoBehaviour
 	{
 		jumpTimes = 0;
 	}
+
+	public void Die()
+	{
+		state = State.Dead;
+		spriteRenderer.color = new Color(1f,1f,1f,0.5f);
+		
+	}
+	
+
 }

@@ -7,14 +7,19 @@ public class BranchGrowth : MonoBehaviour
 	[SerializeField] Transform parent;
 	[SerializeField] float branchEndLength = 30f;
 	[SerializeField] float branchGrowMultiplier = 0.01f;
-
-	private int growth = 0;
+	[SerializeField] bool cancelRigidbody = false;
 
 
 	// Use this for initialization
 	void Start ()
 	{
 		gameObject.transform.parent = parent;
+		if (!cancelRigidbody)
+		{
+			AddBoxCollider();
+			AddRigidBody();
+		}
+
 
 	}
 	
@@ -25,11 +30,28 @@ public class BranchGrowth : MonoBehaviour
 	}
 	private void BranchGrow()
 	{
-		float currentLength = gameObject.transform.localScale.x;
-		if (currentLength < branchEndLength)
+		if (gameObject.transform.localScale.x < branchEndLength)
 		{
-			gameObject.transform.localScale = new Vector3(currentLength + branchGrowMultiplier * Time.deltaTime, 1, 1);
-			growth++;
+			gameObject.transform.localScale = gameObject.transform.localScale + new Vector3(branchGrowMultiplier * Time.deltaTime, 0, 0);
+		}
+	}
+	private void AddBoxCollider()
+	{
+		if (gameObject.GetComponent<BoxCollider2D>() == null)
+		{
+			Collider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
+			boxCollider.isTrigger = false;
+		}
+
+	}
+
+	private void AddRigidBody()
+	{
+		if (gameObject.GetComponent<Rigidbody2D>() == null)
+		{
+			Rigidbody2D rigidBody = gameObject.AddComponent<Rigidbody2D>();
+			rigidBody.bodyType = RigidbodyType2D.Static;
+			rigidBody.simulated = true;
 		}
 	}
 }
