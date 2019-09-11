@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
 
 	public bool isAlive = true;
 
+	public bool hasSeed = true;
+
 	
 	int jumpTimes = 0;
 	
@@ -116,7 +118,9 @@ public class Player : MonoBehaviour
 			case "branch":
 				jumpTimes = 0;
 				break;
+			
 		}
+
 		
 	}
 
@@ -129,14 +133,18 @@ public class Player : MonoBehaviour
 
 	void RespondToPlantSeed()
 	{
-		if (Input.GetKeyDown(KeyCode.S))
+		
+		if (Input.GetKeyDown(KeyCode.S) && hasSeed)
 		{
 			List<GameObject> playerList = GameObject.Find("Control").GetComponent<Control>().playerList;
+				
+			Instantiate(seed, playerList[playerList.Count-1].transform.position, Quaternion.identity);
 			
-			GameObject a = Instantiate(seed, playerList[playerList.Count-1].transform.position, Quaternion.identity);
-			
-			
+				
+
+			hasSeed = false;
 		}
+		
 	}
 	
 

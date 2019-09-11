@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tree : MonoBehaviour
+public class TreeGrow : MonoBehaviour
 {
 	[SerializeField] GameObject branch;
 	[SerializeField] int growNewBranchInterval = 10;
+	[SerializeField] int growBranchTotalTime = 30;
 	[SerializeField] GameObject treeTop;
 	[SerializeField] private float treeGrowRange = 4;
+	[SerializeField] private int branchNumber = 5;
 	public Transform right;
 	public Transform left;
 	
 	Vector2 branchPosition;
 	float randomNumber;
-	int branchIndexLastFrame = 0;
+
 	
 	
 
@@ -21,6 +23,8 @@ public class Tree : MonoBehaviour
 	void Start ()
 	{
 		Instantiate(branch, treeTop.transform.position, right.rotation);
+		InvokeRepeating("GrowNewBranch",0,growNewBranchInterval);
+		Invoke("StopGrowBranch",growBranchTotalTime);
 
 	}
 
@@ -33,20 +37,8 @@ public class Tree : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		CheckTimeForNewBranch();
+
 		
-	}
-
-	private void CheckTimeForNewBranch()
-	{
-		int branchIndex = (int)Time.time / growNewBranchInterval;
-
-		if (branchIndex > branchIndexLastFrame)
-		{
-			GrowNewBranch();
-		}
-
-		branchIndexLastFrame = branchIndex;
 	}
 
 	private void GrowNewBranch()
@@ -62,6 +54,11 @@ public class Tree : MonoBehaviour
 		{
 			Instantiate(branch, branchPosition, left.rotation);
 		}
+	}
+
+	void StopGrowBranch()
+	{
+		CancelInvoke("GrowNewBranch");
 	}
 	
 }
