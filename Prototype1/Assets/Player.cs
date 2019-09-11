@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
 	
 	[SerializeField] float playerGrowMultiplier = 1f;
 	[SerializeField] GameObject seed;
+	[SerializeField] GameObject lastWords;
+	private bool hasLastWords = true;
 	private SpriteRenderer spriteRenderer;
 
 	
@@ -105,10 +107,10 @@ public class Player : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (!isAlive)
-		{
-			return;
-		}
+//		if (!isAlive)
+//		{
+//			return;
+//		}
 
 		switch (collision.gameObject.tag)
 		{
@@ -117,6 +119,15 @@ public class Player : MonoBehaviour
 				break;
 			case "branch":
 				jumpTimes = 0;
+				break;
+			case "Player":
+				jumpTimes = 0;
+				if ((!isAlive) && hasLastWords)
+				{
+					Instantiate(lastWords, transform.position + new Vector3(0,2,0), Quaternion.identity);
+					hasLastWords = false;
+				}
+
 				break;
 			
 		}

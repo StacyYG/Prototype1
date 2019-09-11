@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SelfDestructor : MonoBehaviour {
+	
+	[SerializeField] float startTime = 3f;
 
 	// Use this for initialization
 	void Start () {
-		Destroy(gameObject,10f);
+		Destroy(gameObject,startTime);
 		
 		
 	}

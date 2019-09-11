@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 50384544023740076}
   m_Layer: 0
   m_Name: Player
-  m_TagString: branch
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,9 @@ MonoBehaviour:
   maxSpeedX: 12
   playerGrowMultiplier: 0.1
   seed: {fileID: 1013084803642992, guid: b472c324d79da1f409ab0d1e02f8b729, type: 2}
+  lastWords: {fileID: 1554068602185800, guid: 3d57cc4dc3babbc4ea9f139d6c1d02f2, type: 2}
   isAlive: 1
+  hasSeed: 1
 --- !u!212 &212175800898386316
 SpriteRenderer:
   m_ObjectHideFlags: 1

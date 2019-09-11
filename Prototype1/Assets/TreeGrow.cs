@@ -9,7 +9,7 @@ public class TreeGrow : MonoBehaviour
 	[SerializeField] int growBranchTotalTime = 30;
 	[SerializeField] GameObject treeTop;
 	[SerializeField] private float treeGrowRange = 4;
-	[SerializeField] private int branchNumber = 5;
+
 	public Transform right;
 	public Transform left;
 	
