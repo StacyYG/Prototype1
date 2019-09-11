@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Control : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class Control : MonoBehaviour
 	public CameraController cameraController;
 
 	public ScoreBoard scoreBoard;
+	
+	int currentSceneIndex = 0;
 	
 	
 	// Use this for initialization
@@ -33,6 +36,15 @@ public class Control : MonoBehaviour
 	void Update ()
 	{
 		GiveBirth();
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			ReloadLevel();
+		}
+
+		if (!playerList[playerList.Count-1].GetComponent<Player>().isAlive)
+		{
+			Invoke("ReloadLevel",2f);
+		}
 	}
 
 	private void GiveBirth()
@@ -54,5 +66,10 @@ public class Control : MonoBehaviour
 		}
 
 		giveBirthIndexLastFrame = giveBirthIndex;
+	}
+	
+	void ReloadLevel()
+	{
+		SceneManager.LoadScene(currentSceneIndex);
 	}
 }

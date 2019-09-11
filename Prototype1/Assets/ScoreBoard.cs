@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class ScoreBoard : MonoBehaviour
 {
-	int score;
+	public int score;
+	public int highScore = -3;
 	Text scoreText;
 	[SerializeField] public Transform player;
 
@@ -22,5 +23,9 @@ public class ScoreBoard : MonoBehaviour
 	{
 		score = (int)player.transform.position.y;
 		scoreText.text = "CURRENT HEIGHT:  " + score.ToString();
+		if (score > highScore)
+		{
+			highScore = score;
+		}
 	}
 }

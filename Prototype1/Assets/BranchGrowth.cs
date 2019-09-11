@@ -8,12 +8,17 @@ public class BranchGrowth : MonoBehaviour
 	[SerializeField] float branchEndLength = 30f;
 	[SerializeField] float branchGrowMultiplier = 0.01f;
 	[SerializeField] bool cancelRigidbody = false;
+	[SerializeField] bool cancelParent = false;
 
 
 	// Use this for initialization
 	void Start ()
 	{
-		gameObject.transform.parent = parent;
+		if (!cancelParent)
+		{
+			gameObject.transform.parent = parent;
+		}
+		
 		if (!cancelRigidbody)
 		{
 			AddBoxCollider();
@@ -22,7 +27,12 @@ public class BranchGrowth : MonoBehaviour
 
 
 	}
-	
+
+	void Awake()
+	{
+		parent = GameObject.Find("tree").transform;
+	}
+
 	// Update is called once per frame
 	void Update () {
 		BranchGrow();

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Tree : MonoBehaviour
 {
-	[SerializeField] GameObject player;
-	[SerializeField] GameObject trunk;
 	[SerializeField] GameObject branch;
 	[SerializeField] int growNewBranchInterval = 10;
 	[SerializeField] GameObject treeTop;
@@ -22,10 +20,16 @@ public class Tree : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-
+		Instantiate(branch, treeTop.transform.position, right.rotation);
 
 	}
-	
+
+	void Awake()
+	{
+		right= GameObject.Find("RIGHT").transform;
+		left = GameObject.Find("LEFT").transform;
+	}
+
 	// Update is called once per frame
 	void Update ()
 	{

@@ -1,14 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.SceneManagement;
-using Debug = System.Diagnostics.Debug;
 
 public class Player : MonoBehaviour
 {
 	Rigidbody2D rigidBody;
-	int currentSceneIndex = 0;
 	
 	[SerializeField] int maxJumpTimes = 2;
 	[SerializeField] float jumpForce = 400f;
@@ -16,16 +12,14 @@ public class Player : MonoBehaviour
 	[SerializeField] float maxSpeedX = 12f;
 	
 	[SerializeField] float playerGrowMultiplier = 1f;
+	[SerializeField] GameObject seed;
 	private SpriteRenderer spriteRenderer;
 
 	
 	private float velocityLastFrame;
 
-	enum State
-	{
-		Alive, Dead
-	}
-	State state = State.Alive;
+	public bool isAlive = true;
+
 	
 	int jumpTimes = 0;
 	
@@ -41,20 +35,12 @@ public class Player : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-		if (state == State.Alive)
+		if (isAlive)
 		{
 			RespondToMovement();
+			RespondToPlantSeed();
 		}
 
-		if (UnityEngine.Debug.isDebugBuild)
-		{
-			RespondToDebugKeys();
-		}
-
-		if (Input.GetKeyDown(KeyCode.R))
-		{
-			ReloadLevel();
-		}
 
 		if (gameObject.transform.localScale.x < 1)
 		{
@@ -65,28 +51,6 @@ public class Player : MonoBehaviour
 
 	}
 
-	void RespondToDebugKeys()
-	{
-		if (Input.GetKeyDown(KeyCode.L))
-		{
-			LoadNextLevel();
-		}
-	}
-
-	void ReloadLevel()
-	{
-		SceneManager.LoadScene(currentSceneIndex);
-	}
-	
-	private void LoadNextLevel()
-	{
-		int nextSceneIndex = currentSceneIndex + 1;
-		if (nextSceneIndex == SceneManager.sceneCountInBuildSettings)
-		{
-			nextSceneIndex = 0;
-		}
-		SceneManager.LoadScene(nextSceneIndex);
-	}
 
 	private void RespondToMovement()
 	{
@@ -137,16 +101,42 @@ public class Player : MonoBehaviour
 		
 	}
 
-	private void OnCollisionEnter2D(Collision2D other)
+	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		jumpTimes = 0;
+		if (!isAlive)
+		{
+			return;
+		}
+
+		switch (collision.gameObject.tag)
+		{
+			case "unfriendly":
+				Die();
+				break;
+			case "branch":
+				jumpTimes = 0;
+				break;
+		}
+		
 	}
 
 	public void Die()
 	{
-		state = State.Dead;
+		isAlive = false;
 		spriteRenderer.color = new Color(1f,1f,1f,0.5f);
 		
+	}
+
+	void RespondToPlantSeed()
+	{
+		if (Input.GetKeyDown(KeyCode.S))
+		{
+			List<GameObject> playerList = GameObject.Find("Control").GetComponent<Control>().playerList;
+			
+			GameObject a = Instantiate(seed, playerList[playerList.Count-1].transform.position, Quaternion.identity);
+			
+			
+		}
 	}
 	
 
