@@ -7,7 +7,7 @@ public class ScoreBoard : MonoBehaviour
 {
 	public int score;
 	public int highScore = -3;
-	Text scoreText;
+	private Text scoreText;
 	[SerializeField] public Transform player;
 
 	// Use this for initialization

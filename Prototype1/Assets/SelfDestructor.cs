@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelfDestructor : MonoBehaviour {
 	
-	[SerializeField] float startTime = 3f;
+	[SerializeField] private float startTime = 3f;
 
 	// Use this for initialization
 	void Start () {

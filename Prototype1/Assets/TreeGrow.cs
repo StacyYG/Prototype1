@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class TreeGrow : MonoBehaviour
 {
-	[SerializeField] GameObject branch;
-	[SerializeField] int growNewBranchInterval = 10;
-	[SerializeField] int growBranchTotalTime = 30;
-	[SerializeField] GameObject treeTop;
+	[SerializeField] private GameObject branch;
+	[SerializeField] private int growNewBranchInterval = 10;
+	[SerializeField] private int growBranchTotalTime = 30;
+	[SerializeField] private GameObject treeTop;
 	[SerializeField] private float treeGrowRange = 4;
 
 	public Transform right;
 	public Transform left;
 	
-	Vector2 branchPosition;
-	float randomNumber;
+	private Vector2 branchPosition;
+	private float randomNumber;
 
 	
 	

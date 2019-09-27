@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	Rigidbody2D rigidBody;
+	private Rigidbody2D rigidBody;
 	
-	[SerializeField] int maxJumpTimes = 2;
-	[SerializeField] float jumpForce = 400f;
-	[SerializeField] float horizontalMultiplier = 200f;
-	[SerializeField] float maxSpeedX = 12f;
+	[SerializeField] private int maxJumpTimes = 2;
+	[SerializeField] private float jumpForce = 400f;
+	[SerializeField] private float horizontalMultiplier = 200f;
+	[SerializeField] private float maxSpeedX = 12f;
 	
-	[SerializeField] float playerGrowMultiplier = 1f;
-	[SerializeField] GameObject seed;
-	[SerializeField] GameObject lastWords;
+	[SerializeField] private float playerGrowMultiplier = 1f;
+	[SerializeField] private GameObject seed;
+	[SerializeField] private GameObject lastWords;
 	private bool hasLastWords = true;
 	private SpriteRenderer spriteRenderer;
 
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 	public bool hasSeed = true;
 
 	
-	int jumpTimes = 0;
+	private int jumpTimes;
 	
 	// Use this for initialization
 	void Start ()

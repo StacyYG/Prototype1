@@ -8,18 +8,17 @@ public class Control : MonoBehaviour
 	public GameObject player;
 
 	private int playerNum = 0;
-	[SerializeField] int giveBirthInterval = 9;
-	[SerializeField] float playerStartSize = 0.2f;
-	[SerializeField] float separateTime = 3f;
+	[SerializeField] private int giveBirthInterval = 9;
+	[SerializeField] private float playerStartSize = 0.2f;
+	[SerializeField] private float separateTime = 3f;
 	public List<GameObject> playerList;
 
 	public CameraController cameraController;
 
 	public ScoreBoard scoreBoard;
-
-	//public CollectFlower collectFlower;
 	
-	int currentSceneIndex = 0;
+	
+	private int currentSceneIndex = 0;
 
 	
 	

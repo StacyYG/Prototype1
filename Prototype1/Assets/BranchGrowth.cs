@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class BranchGrowth : MonoBehaviour
 {
-	[SerializeField] Transform parent;
-	[SerializeField] float branchEndLength = 30f;
-	[SerializeField] float branchGrowMultiplier = 0.01f;
-	[SerializeField] bool cancelRigidbody = false;
-	[SerializeField] bool cancelParent = false;
+	[SerializeField] private Transform parent;
+	[SerializeField] private float branchEndLength = 30f;
+	[SerializeField] private float branchGrowMultiplier = 0.01f;
+	[SerializeField] private bool cancelRigidbody = false;
+	[SerializeField] private bool cancelParent = false;
 
 
 	// Use this for initialization

@@ -5,7 +5,7 @@ using UnityEngine;
 public class SeedGrow : MonoBehaviour
 {
 
-	[SerializeField] GameObject tree;
+	[SerializeField] private GameObject tree;
 	public Transform treeRotate;
 
 	// Use this for initialization
