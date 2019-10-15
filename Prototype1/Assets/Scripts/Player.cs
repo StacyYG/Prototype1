@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 
 	
-	private float velocityLastFrame;
+	private int velocityLastFrame;
 
 	public bool isAlive = true;
 
@@ -65,37 +65,37 @@ public class Player : MonoBehaviour
 			jumpTimes++;
 		}
 
-		float movementThisFrame = horizontalMultiplier * Time.deltaTime;
+		float forceThisFrame = horizontalMultiplier * Time.deltaTime;
 		float velocityY = rigidBody.velocity.y;
 		
 		if (Input.GetKey(KeyCode.A))
 		{
-			if (velocityLastFrame == -1f)
+			if (velocityLastFrame == -1)
 			{
-				rigidBody.AddForce(Vector2.left * movementThisFrame);
+				rigidBody.AddForce(Vector2.left * forceThisFrame);
 			}
 			else
 			{
 				rigidBody.velocity = new Vector2(0,velocityY);
-				rigidBody.AddForce(Vector2.left * movementThisFrame);
+				rigidBody.AddForce(Vector2.left * forceThisFrame);
 			}
 			
-			velocityLastFrame = -1f;
+			velocityLastFrame = -1;
 		}
 
 		if (Input.GetKey(KeyCode.D))
 		{
-			if (velocityLastFrame == 1f)
+			if (velocityLastFrame == 1)
 			{
-				rigidBody.AddForce(Vector2.right * movementThisFrame);
+				rigidBody.AddForce(Vector2.right * forceThisFrame);
 			}
 			else
 			{
 				rigidBody.velocity = new Vector2(0,velocityY);
-				rigidBody.AddForce(Vector2.right * movementThisFrame);
+				rigidBody.AddForce(Vector2.right * forceThisFrame);
 			}
 			
-			velocityLastFrame = 1f;
+			velocityLastFrame = 1;
 		}
 		
 		float velocityX = rigidBody.velocity.x;
@@ -107,10 +107,6 @@ public class Player : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-//		if (!isAlive)
-//		{
-//			return;
-//		}
 
 		switch (collision.gameObject.tag)
 		{
