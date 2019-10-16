@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Control : MonoBehaviour
 {
 	public GameObject player;
+	public GameObject tree;
 
 	private int playerNum = 0;
 	[SerializeField] private int giveBirthInterval = 9;
@@ -23,8 +24,9 @@ public class Control : MonoBehaviour
 	
 	
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
+		Instantiate(tree, new Vector3(-1f, -10.5f, 0f), Quaternion.identity);
 		GameObject a = Instantiate(player);
 		a.name = "player" + playerNum;
 		playerList.Add(a);

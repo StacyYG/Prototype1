@@ -17,7 +17,8 @@
           <e p="scoreBoard.cs" t="Include" />
           <e p="SeedGrow.cs" t="Include" />
           <e p="SelfDestructor.cs" t="Include" />
-          <e p="TreeGrow.cs" t="Include" />
+          <e p="TreeGrowControl.cs" t="Include" />
+          <e p="TrunkGrowth.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

@@ -4,21 +4,18 @@ using UnityEngine;
 
 public class BranchGrowth : MonoBehaviour
 {
-	[SerializeField] private Transform parent;
-	[SerializeField] private float branchEndLength = 30f;
-	[SerializeField] private float branchGrowMultiplier = 0.01f;
+	[SerializeField] private float branchGrowMultiplierX = 0.1f;
+	[SerializeField] private float branchGrowMultiplierY = 0.01f;
 	[SerializeField] private bool cancelRigidbody = false;
-	[SerializeField] private bool cancelParent = false;
+	
+
+	private TreeGrowControl _treeGrowControl;
 
 
 	// Use this for initialization
 	void Start ()
 	{
-		if (!cancelParent)
-		{
-			gameObject.transform.parent = parent;
-		}
-		
+		_treeGrowControl = GetComponentInParent<TreeGrowControl>();
 		if (!cancelRigidbody)
 		{
 			AddBoxCollider();
@@ -28,10 +25,7 @@ public class BranchGrowth : MonoBehaviour
 
 	}
 
-	void Awake()
-	{
-		parent = GameObject.Find("tree").transform;
-	}
+
 
 	// Update is called once per frame
 	void Update () {
@@ -40,9 +34,11 @@ public class BranchGrowth : MonoBehaviour
 	}
 	private void BranchGrow()
 	{
-		if (gameObject.transform.localScale.x < branchEndLength)
+		if (_treeGrowControl.isGrowing)
 		{
-			gameObject.transform.localScale = gameObject.transform.localScale + new Vector3(branchGrowMultiplier * Time.deltaTime, 0, 0);
+			gameObject.transform.localScale = gameObject.transform.localScale + 
+			                                  new Vector3(branchGrowMultiplierX * Time.deltaTime,
+				                                  branchGrowMultiplierY * Time.deltaTime, 0);
 		}
 	}
 	private void AddBoxCollider()

@@ -6,11 +6,11 @@ public class SeedGrow : MonoBehaviour
 {
 
 	[SerializeField] private GameObject tree;
-	public Transform treeRotate;
+	[SerializeField] private float sproutTime = 5f;
 
 	// Use this for initialization
 	void Start () {
-		Invoke("GrowToATree",5f);
+		Invoke("GrowToATree",sproutTime);
 		
 	}
 	
@@ -22,6 +22,6 @@ public class SeedGrow : MonoBehaviour
 
 	void GrowToATree()
 	{
-		Instantiate(tree, gameObject.transform.position, treeRotate.rotation);
+		Instantiate(tree, transform.position, Quaternion.identity);
 	}
 }
