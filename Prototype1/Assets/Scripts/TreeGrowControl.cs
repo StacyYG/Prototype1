@@ -24,9 +24,8 @@ public class TreeGrowControl : MonoBehaviour
     void Start ()
     {
         treeTop = transform.GetChild(0).gameObject.transform.GetChild(0);
-        Debug.Log(treeTop);
-		
-		
+
+
         Instantiate(branch, treeTop.position, right.rotation, transform);
         InvokeRepeating("GrowNewBranch",growNewBranchInterval,growNewBranchInterval);
         Invoke("StopGrowBranch", stopGrowTime);
