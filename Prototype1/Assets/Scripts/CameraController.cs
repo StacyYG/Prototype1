@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	public Transform player;//获得角色
+	private Transform player;//获得角色
 	public Vector2 Margin;//相机与角色的相对范围
 	public Vector2 smoothing;//相机移动的平滑度
 	//public BoxCollider2D Bounds;//背景的边界
@@ -19,7 +19,9 @@ public class CameraController : MonoBehaviour {
 		IsFollowing = true;//默认为跟随
 	}
 
-	void Update(){
+	void Update()
+	{
+		player = Services.Players[Services.Players.Count - 1].transform;
 		var x = transform.position.x;
 		var y = transform.position.y;
 		if (IsFollowing) {
