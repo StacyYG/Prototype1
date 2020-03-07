@@ -7,10 +7,11 @@ public class SelfDestructor : MonoBehaviour {
 	[SerializeField] private float startTime = 3f;
 
 	// Use this for initialization
-	void Start () {
-		Destroy(gameObject,startTime);
-		
-		
+	void Start ()
+	{
+		Destroy(gameObject, startTime);
+
+
 	}
 	
 	// Update is called once per frame

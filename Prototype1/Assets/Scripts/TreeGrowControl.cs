@@ -15,16 +15,11 @@ public class TreeGrowControl : MonoBehaviour
     private float randomNumber;
     private Transform treeTop;
     public bool isGrowing = true;
-	
-
-	
-	
-
+    
     // Use this for initialization
     void Start ()
     {
         treeTop = transform.GetChild(0).gameObject.transform.GetChild(0);
-
 
         Instantiate(branch, treeTop.position, right.rotation, transform);
         InvokeRepeating("GrowNewBranch",growNewBranchInterval,growNewBranchInterval);

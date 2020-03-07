@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,8 +8,6 @@ public class Control : MonoBehaviour
 {
 	public GameObject player;
 	public GameObject tree;
-
-	private int playerNum = 0;
 	public readonly int giveBirthInterval = 9;
 	public readonly float playerStartSize = 0.3f;
 	public readonly float separateTime = 3f;
@@ -47,20 +46,21 @@ public class Control : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.R))
 		{
-			ReloadLevel();
+			SceneManager.LoadScene(0);
 		}
 
-		if (!Services.Players[Services.Players.Count - 1].isAlive)
+		if (!Services.Players.Last().isAlive)
 		{
-			Invoke("ReloadLevel",10f);
+			StartCoroutine(WaitAndReloadLevel(2f));
 		}
 		
 		
 	}
 	
-	
-	void ReloadLevel()
+
+	private IEnumerator WaitAndReloadLevel(float waitTime)
 	{
+		yield return new WaitForSeconds(waitTime);
 		SceneManager.LoadScene(0);
 	}
 }

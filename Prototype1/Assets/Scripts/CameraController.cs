@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class CameraController : MonoBehaviour {
 
@@ -21,7 +22,7 @@ public class CameraController : MonoBehaviour {
 
 	void Update()
 	{
-		player = Services.Players[Services.Players.Count - 1].transform;
+		player = Services.Players.Last().transform;
 		var x = transform.position.x;
 		var y = transform.position.y;
 		if (IsFollowing) {

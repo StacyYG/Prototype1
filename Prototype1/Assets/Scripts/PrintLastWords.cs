@@ -9,8 +9,6 @@ public class PrintLastWords : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		
-		
 		int n = Random.Range(0, 5);
 		switch (n)
 		{
@@ -35,10 +33,5 @@ public class PrintLastWords : MonoBehaviour
 		}
 
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
 
-	}
 }
