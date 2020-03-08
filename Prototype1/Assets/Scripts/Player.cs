@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
 	private SpriteRenderer _spriteRenderer;
 	private int _jumpTimes;
 	private int _maxJumpTimes = 2;
-	private float _jumpForce = 800f;
+	private float _jumpForce = 700f;
 	private float _horizontalMultiplier = 4000f;
 	private float _maxSpeedX = 12f;
 	private float _playerGrowMultiplier = 0.1f;
@@ -23,11 +23,12 @@ public class Player : MonoBehaviour
 	{
 		_rigidBody = GetComponent<Rigidbody2D>();
 		_spriteRenderer = GetComponent<SpriteRenderer>();
-		Invoke(nameof(GiveBirth), Services.Control.giveBirthInterval);
+		StartCoroutine(WaitAndGiveBirth(Services.Control.giveBirthInterval));
 	}
 
 	// Update is called once per frame
-	void Update () {
+	private void Update() 
+	{
 		if (isAlive)
 		{
 			RespondToMovement();
@@ -39,7 +40,6 @@ public class Player : MonoBehaviour
 		}
 		
 	}
-
 
 	private void RespondToMovement()
 	{
@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
 		
 	}
 
-	public void Die()
+	private void Die()
 	{
 		isAlive = false;
 		_spriteRenderer.color = new Color(1f,1f,1f,0.5f);
@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
 		Die();
 	}
 
-	void RespondToPlantSeed()
+	private void RespondToPlantSeed()
 	{
 		if (Input.GetKeyDown(KeyCode.S) && _hasSeed)
 		{
@@ -138,17 +138,20 @@ public class Player : MonoBehaviour
 	private void GiveBirth()
 	{
 		if (!isAlive) return;
-		var parentPlayer = Services.Players.Last();
-		parentPlayer._hasSeed = false;
-		parentPlayer.StartCoroutine(WaitAndDie(Services.Control.separateTime));
+		_hasSeed = false;
+		StartCoroutine(WaitAndDie(Services.Control.separateTime));
 		
-		var newPlayerObj = Instantiate(Resources.Load<GameObject>("Prefabs/Player"), parentPlayer.transform.position, parentPlayer.transform.rotation);
+		var newPlayerObj = Instantiate(Resources.Load<GameObject>("Prefabs/Player"), transform.position, transform.rotation);
 		newPlayerObj.name = "player " + Services.Players.Count;
 		newPlayerObj.transform.localScale = Services.Control.playerStartSize * Vector3.one;
 		var newPlayer = newPlayerObj.AddComponent<Player>();
 		Services.Players.Add(newPlayer);
-
 	}
-	
+
+	private IEnumerator WaitAndGiveBirth(float interval)
+	{
+		yield return new WaitForSeconds(interval);
+		GiveBirth();
+	}
 
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,31 +7,28 @@ using UnityEngine.SceneManagement;
 
 public class Control : MonoBehaviour
 {
-	public GameObject player;
-	public GameObject tree;
 	public readonly int giveBirthInterval = 9;
 	public readonly float playerStartSize = 0.3f;
 	public readonly float separateTime = 3f;
-	public GameObject seed;
-	public GameObject lastWords;
-	public List<GameObject> playerList;
-
-	public CameraController cameraController;
-
-	public ScoreBoard scoreBoard;
-	
-
-	
+	private TreeGrowControl _firstTree;
 	
 	// Use this for initialization
-	void Awake ()
+	private void Awake ()
 	{
 		Services.Control = this;
 		Services.Players = new List<Player>();
 		Services.CameraController = Camera.main.GetComponent<CameraController>();
+		Services.Trees = new List<TreeGrowControl>();
 		
-		Instantiate(tree, new Vector3(-1f, -10.5f, 0f), Quaternion.identity);
 		CreateNewPlayer();
+	}
+
+	private void Start()
+	{
+		var newTree = new GameObject();
+		newTree.transform.position = new Vector3(-1f, -10.5f, 0f);
+		_firstTree = newTree.AddComponent<TreeGrowControl>();
+
 	}
 
 	private static void CreateNewPlayer()
@@ -49,12 +47,11 @@ public class Control : MonoBehaviour
 			SceneManager.LoadScene(0);
 		}
 
+		if (Services.Players.Count == 0) return;
 		if (!Services.Players.Last().isAlive)
 		{
 			StartCoroutine(WaitAndReloadLevel(2f));
 		}
-		
-		
 	}
 	
 

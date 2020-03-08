@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class SeedGrow : MonoBehaviour
 {
-
-	[SerializeField] private GameObject tree;
+	
 	[SerializeField] private float sproutTime = 5f;
 
 	// Use this for initialization
-	void Start () {
-		Invoke("GrowToATree",sproutTime);
-		
+	void Start ()
+	{
+		StartCoroutine(WaitAndGrowToTree(sproutTime));
+
 	}
 	
 
@@ -20,8 +20,17 @@ public class SeedGrow : MonoBehaviour
 		
 	}
 
-	void GrowToATree()
+	private void GrowToTree()
 	{
-		Instantiate(tree, transform.position, Quaternion.identity);
+		var newTree = new GameObject();
+		newTree.transform.position = transform.position;
+		newTree.AddComponent<TreeGrowControl>();
+		gameObject.transform.parent = newTree.transform;
+	}
+
+	private IEnumerator WaitAndGrowToTree(float waitTime)
+	{
+		yield return new WaitForSeconds(waitTime);
+		GrowToTree();
 	}
 }

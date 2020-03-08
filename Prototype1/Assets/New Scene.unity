@@ -341,13 +341,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b2cd0cb4cb44e4cbd0d6c404476fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1933791395292004, guid: 4b7c38588f3006c4285f58fa7c8af4dd, type: 3}
-  tree: {fileID: 323309530189914185, guid: b7bcfd524327a764a90c35b16ed56e22, type: 3}
-  seed: {fileID: 0}
-  lastWords: {fileID: 0}
-  playerList: []
-  cameraController: {fileID: 1425375590}
-  scoreBoard: {fileID: 351816961}
 --- !u!4 &617933613
 Transform:
   m_ObjectHideFlags: 0

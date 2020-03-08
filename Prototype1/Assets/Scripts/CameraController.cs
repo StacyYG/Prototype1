@@ -22,6 +22,8 @@ public class CameraController : MonoBehaviour {
 
 	void Update()
 	{
+		if (Services.Players.Count == 0) return;
+		
 		player = Services.Players.Last().transform;
 		var x = transform.position.x;
 		var y = transform.position.y;

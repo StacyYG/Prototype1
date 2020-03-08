@@ -1,58 +1,108 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TreeGrowControl : MonoBehaviour
 {
-    [SerializeField] private GameObject branch;
-    [SerializeField] private int growNewBranchInterval = 9;
-    [SerializeField] private int stopGrowTime = 30;
-    [SerializeField] private float horizontalRange = 4;
-    public Transform right;
-    public Transform left;
-	
-    private Vector2 branchPosition;
-    private float randomNumber;
-    private Transform treeTop;
+    private int _growNewBranchInterval = 9;
+    private int _stopGrowTime = 30;
+    private float _horizontalRange = 4;
+
+    private Vector2 _branchPosition;
     public bool isGrowing = true;
+
+    private GameObject _trunk;
+    public List<GameObject> branches;
+    private List<Growth> _growths;
+    private Vector3 _treeTopPosition;
     
     // Use this for initialization
-    void Start ()
+    public void Awake ()
     {
-        treeTop = transform.GetChild(0).gameObject.transform.GetChild(0);
+        branches = new List<GameObject>();
+        _growths = new List<Growth>();
+        CreateNewTree();
+        StartCoroutine(WaitAndStopGrow(_stopGrowTime));
+    }
 
-        Instantiate(branch, treeTop.position, right.rotation, transform);
-        InvokeRepeating("GrowNewBranch",growNewBranchInterval,growNewBranchInterval);
-        Invoke("StopGrowBranch", stopGrowTime);
-
+    public void CreateNewTree()
+    {
+        var rootPosition = transform.position;
+        _trunk = Instantiate(Resources.Load<GameObject>("Prefabs/unitBranch"), rootPosition, Quaternion.identity,
+            transform);
+        var trunkGrowth = new Trunk(_trunk, this);
+        trunkGrowth.Start();
+        _growths.Add(trunkGrowth);
+        branches.Add(_trunk);
+        _treeTopPosition = new Vector3(rootPosition.x, rootPosition.y + _trunk.transform.localScale.y * 2.5f - 0.2f, 0f);
+        if (Services.Trees.Count == 0)
+        {
+            InstantiateBranch(_treeTopPosition, Vector3.right);
+        }
+        else
+        {
+            GrowRandomNewBranch();
+        }
+        Services.Trees.Add(this);
     }
 
     // Update is called once per frame
     void Update ()
     {
-        
-
-
-    }
-    private void GrowNewBranch()
-    {
-        randomNumber = Random.Range(-horizontalRange, horizontalRange);
-        branchPosition = treeTop.position + new Vector3(randomNumber,0);
-		
-        if (randomNumber > 0)
+        var rootPosition = transform.position;
+        _treeTopPosition = new Vector3(rootPosition.x, rootPosition.y + _trunk.transform.localScale.y * 2.5f - 0.2f, 0f);
+        foreach (var growth in _growths)
         {
-            Instantiate(branch, branchPosition, right.rotation, transform);
+            growth.Update();
+        }
+        
+    }
+    private void GrowRandomNewBranch()
+    {
+        var random = Random.Range(-_horizontalRange, _horizontalRange);
+        _branchPosition = _treeTopPosition + new Vector3(random,0);
+        if (random > 0)
+        {
+            InstantiateBranch(_branchPosition, Vector3.right);
         }
         else
         {
-            Instantiate(branch, branchPosition, left.rotation, transform);
+            InstantiateBranch(_branchPosition, Vector3.left);
         }
+        
     }
 
-    void StopGrowBranch()
+    private void InstantiateBranch(Vector3 position, Vector3 direction)
     {
-        CancelInvoke("GrowNewBranch");
+        var branch = Instantiate(Resources.Load<GameObject>("Prefabs/unitBranch"), position, Quaternion.identity,
+            transform);
+        var leaves = Instantiate(Resources.Load<GameObject>("Prefabs/leavesParticle"), position, Quaternion.identity,
+            branch.transform);
+        branch.transform.up = direction;
+        branch.tag = "branch";
+        var branchGrowth = new Branch(branch, this);
+        branchGrowth.Start();
+        branches.Add(branch);
+        _growths.Add(branchGrowth);
+        
+        if (isGrowing)
+        {
+            StartCoroutine(WaitAndGrowNewBranch(_growNewBranchInterval));
+        }
+
+    }
+
+    private IEnumerator WaitAndStopGrow(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
         isGrowing = false;
     }
-	
+
+    private IEnumerator WaitAndGrowNewBranch(float interval)
+    {
+        yield return new WaitForSeconds(interval);
+        GrowRandomNewBranch();
+    }
 }

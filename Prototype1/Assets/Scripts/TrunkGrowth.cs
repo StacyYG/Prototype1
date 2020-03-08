@@ -20,8 +20,7 @@ public class TrunkGrowth : MonoBehaviour
 	void Update ()
 	{
 		TreeGrow();
-
-
+		
 	}
 
 	private void TreeGrow()

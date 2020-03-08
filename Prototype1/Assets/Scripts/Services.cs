@@ -39,4 +39,16 @@ public static class Services
         }
         set => _control = value;
     }
+
+    private static List<TreeGrowControl> _trees;
+
+    public static List<TreeGrowControl> Trees
+    {
+        get
+        {
+            Debug.Assert(_trees != null);
+            return _trees;
+        }
+        set => _trees = value;
+    }
 }
