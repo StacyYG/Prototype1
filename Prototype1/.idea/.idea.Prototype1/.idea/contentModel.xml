@@ -6,6 +6,7 @@
     <e p="D:\PrototypeStudio\Prototype1\Prototype1" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="DataFile.txt" t="Include" />
         <e p="Scripts" t="Include">
           <e p="BranchGrowth.cs" t="Include" />
           <e p="CameraController.cs" t="Include" />
@@ -14,6 +15,7 @@
           <e p="Growth.cs" t="Include" />
           <e p="Player.cs" t="Include" />
           <e p="PrintLastWords.cs" t="Include" />
+          <e p="SaveData.cs" t="Include" />
           <e p="scoreBoard.cs" t="Include" />
           <e p="SeedGrow.cs" t="Include" />
           <e p="SelfDestructor.cs" t="Include" />

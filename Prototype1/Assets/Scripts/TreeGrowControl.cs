@@ -18,6 +18,7 @@ public class TreeGrowControl : MonoBehaviour
     private List<Growth> _growths;
     private Vector3 _treeTopPosition;
     
+    
     // Use this for initialization
     public void Awake ()
     {

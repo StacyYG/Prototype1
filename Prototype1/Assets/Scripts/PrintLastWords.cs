@@ -9,11 +9,11 @@ public class PrintLastWords : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		int n = Random.Range(0, 5);
+		int n = Random.Range(0, 6);
 		switch (n)
 		{
 			case 0:
-				GetComponent<TextMesh>().text = "Good Job";
+				GetComponent<TextMesh>().text = "Good job";
 				break;
 			case 1:
 				GetComponent<TextMesh>().text = "Keep going";
@@ -27,9 +27,10 @@ public class PrintLastWords : MonoBehaviour
 			case 4:
 				GetComponent<TextMesh>().text = "Up Up!";
 				break;
+			case 5:
+				GetComponent<TextMesh>().text = "Don't give up";
+				break;
 				
-		
-			
 		}
 
 	}

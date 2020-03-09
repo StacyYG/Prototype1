@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class SeedGrow : MonoBehaviour
 {
-	
-	[SerializeField] private float sproutTime = 5f;
+	private float sproutTime = 5f;
 
 	// Use this for initialization
 	void Start ()
 	{
 		StartCoroutine(WaitAndGrowToTree(sproutTime));
-
 	}
 	
 

@@ -10,8 +10,7 @@ public class Control : MonoBehaviour
 	public readonly int giveBirthInterval = 9;
 	public readonly float playerStartSize = 0.3f;
 	public readonly float separateTime = 3f;
-	private TreeGrowControl _firstTree;
-	
+
 	// Use this for initialization
 	private void Awake ()
 	{
@@ -19,6 +18,7 @@ public class Control : MonoBehaviour
 		Services.Players = new List<Player>();
 		Services.CameraController = Camera.main.GetComponent<CameraController>();
 		Services.Trees = new List<TreeGrowControl>();
+		Services.ScoreBoard = GameObject.FindGameObjectWithTag("ScoreBoard").GetComponent<ScoreBoard>();
 		
 		CreateNewPlayer();
 	}
@@ -27,7 +27,7 @@ public class Control : MonoBehaviour
 	{
 		var newTree = new GameObject();
 		newTree.transform.position = new Vector3(-1f, -10.5f, 0f);
-		_firstTree = newTree.AddComponent<TreeGrowControl>();
+		newTree.AddComponent<TreeGrowControl>();
 
 	}
 

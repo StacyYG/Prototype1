@@ -6,7 +6,7 @@ TagManager:
   tags:
   - unfriendly
   - branch
-  - flower
+  - ScoreBoard
   layers:
   - Default
   - TransparentFX

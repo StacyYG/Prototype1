@@ -51,4 +51,16 @@ public static class Services
         }
         set => _trees = value;
     }
+
+    private static ScoreBoard _scoreBoard;
+
+    public static ScoreBoard ScoreBoard
+    {
+        get
+        {
+            Debug.Assert(_scoreBoard != null);
+            return _scoreBoard;
+        }
+        set => _scoreBoard = value;
+    }
 }

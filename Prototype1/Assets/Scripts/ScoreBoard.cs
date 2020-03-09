@@ -20,7 +20,7 @@ public class ScoreBoard : MonoBehaviour
 	void Update()
 	{
 		if (Services.Players.Count == 0) return;
-		scoreText.text = "CURRENT HEIGHT:	" + score + "\nRECORD:	" + GetHighScore();
+		scoreText.text = "CURRENT HEIGHT:\t" + score + "\nSCORE:\t" + GetHighScore() + "\nRECORD:\t" + SaveData.Instance.Record;
 		
 	}
 
