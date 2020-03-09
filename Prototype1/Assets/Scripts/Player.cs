@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 	private float _playerGrowMultiplier = 0.1f;
 	public bool isAlive = true;
 	private bool _hasSeed = true;
-	private bool _hasLastWords = true;
+	public bool hasLastWords = true;
 	private int _velocityLastFrame;
 
 	private void Start()
@@ -103,10 +103,10 @@ public class Player : MonoBehaviour
 		if (collision.gameObject.CompareTag("Player"))
 		{
 			_jumpTimes = 0;
-			if ((!isAlive) && _hasLastWords)
+			if ((!isAlive) && hasLastWords)
 			{
 				Instantiate(Resources.Load<GameObject>("Prefabs/lastWords"), transform.position + new Vector3(0,2,0), Quaternion.identity);
-				_hasLastWords = false;
+				hasLastWords = false;
 			}
 		}
 
@@ -116,6 +116,7 @@ public class Player : MonoBehaviour
 	private void Die()
 	{
 		isAlive = false;
+		_hasSeed = false;
 		_spriteRenderer.color = new Color(1f,1f,1f,0.5f);
 
 	}

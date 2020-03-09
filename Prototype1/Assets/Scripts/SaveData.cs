@@ -18,7 +18,6 @@ public class SaveData : MonoBehaviour
             if (value > _record)
             {
                 _record = value;
-                File.WriteAllText(Application.dataPath + fileName,"Record," + _record);
             }
         }
     }
@@ -35,11 +34,7 @@ public class SaveData : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        string dataFileText = File.ReadAllText(Application.dataPath + fileName);
-        if (dataFileText == "") return;
-        string[] textSplit = dataFileText.Split(',');
-        Record = int.Parse(textSplit[1]);
+        
     }
 
     // Start is called before the first frame update
@@ -52,7 +47,40 @@ public class SaveData : MonoBehaviour
     void Update()
     {
         Record = Services.ScoreBoard.highScore;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Save();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Load();
+        }
     }
-    
+
+    private void Save()
+    {
+        SaveObject saveObject = new SaveObject
+        {
+            savedRecord = _record,
+        };
+        var json = JsonUtility.ToJson(saveObject);
+        File.WriteAllText(Application.dataPath + fileName,json);
+        Debug.Log("saved");
+    }
+
+    private void Load()
+    {
+        if (!File.Exists(Application.dataPath + fileName)) return;
+        var saveString = File.ReadAllText(Application.dataPath + fileName);
+        SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
+        Instance.Record = saveObject.savedRecord;
+        Debug.Log("logged");
+    }
+
+    private class SaveObject
+    {
+        public int savedRecord;
+    }
     
 }
