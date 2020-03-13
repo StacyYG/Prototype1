@@ -4,6 +4,18 @@ using UnityEngine;
 
 public static class Services
 {
+    private static EventManager _eventManager;
+
+    public static EventManager EventManager
+    {
+        get
+        {
+            Debug.Assert(_eventManager != null);
+            return _eventManager;
+        }
+        set => _eventManager = value;
+    }
+
     private static List<Player> _players;
 
     public static List<Player> Players
@@ -63,4 +75,6 @@ public static class Services
         }
         set => _scoreBoard = value;
     }
+    
+    
 }

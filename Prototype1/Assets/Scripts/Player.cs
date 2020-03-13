@@ -15,9 +15,14 @@ public class Player : MonoBehaviour
 	private float _maxSpeedX = 12f;
 	private float _playerGrowMultiplier = 0.1f;
 	public bool isAlive = true;
-	private bool _hasSeed = true;
+	public bool hasSeed = true;
 	public bool hasLastWords = true;
 	private int _velocityLastFrame;
+
+	private void Awake()
+	{
+		Services.Players.Add(this);
+	}
 
 	private void Start()
 	{
@@ -116,7 +121,7 @@ public class Player : MonoBehaviour
 	private void Die()
 	{
 		isAlive = false;
-		_hasSeed = false;
+		hasSeed = false;
 		_spriteRenderer.color = new Color(1f,1f,1f,0.5f);
 
 	}
@@ -129,24 +134,23 @@ public class Player : MonoBehaviour
 
 	private void RespondToPlantSeed()
 	{
-		if (Input.GetKeyDown(KeyCode.S) && _hasSeed)
+		if (Input.GetKeyDown(KeyCode.S) && hasSeed)
 		{
 			Instantiate(Resources.Load<GameObject>("Prefabs/seed"), transform.position, Quaternion.identity);
-			_hasSeed = false;
+			hasSeed = false;
 		}
 	}
 	
 	private void GiveBirth()
 	{
 		if (!isAlive) return;
-		_hasSeed = false;
+		hasSeed = false;
 		StartCoroutine(WaitAndDie(Services.Control.separateTime));
 		
 		var newPlayerObj = Instantiate(Resources.Load<GameObject>("Prefabs/Player"), transform.position, transform.rotation);
 		newPlayerObj.name = "player " + Services.Players.Count;
 		newPlayerObj.transform.localScale = Services.Control.playerStartSize * Vector3.one;
-		var newPlayer = newPlayerObj.AddComponent<Player>();
-		Services.Players.Add(newPlayer);
+		Services.EventManager.Fire(new NewPlayerBorn());
 	}
 
 	private IEnumerator WaitAndGiveBirth(float interval)
@@ -154,5 +158,7 @@ public class Player : MonoBehaviour
 		yield return new WaitForSeconds(interval);
 		GiveBirth();
 	}
-
+	
 }
+
+public class NewPlayerBorn : AGPEvent{}

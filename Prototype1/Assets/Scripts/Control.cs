@@ -15,6 +15,7 @@ public class Control : MonoBehaviour
 	private void Awake ()
 	{
 		Services.Control = this;
+		Services.EventManager = new EventManager();
 		Services.Players = new List<Player>();
 		Services.CameraController = Camera.main.GetComponent<CameraController>();
 		Services.Trees = new List<TreeGrowControl>();
@@ -31,12 +32,10 @@ public class Control : MonoBehaviour
 
 	}
 
-	private static void CreateNewPlayer()
+	private void CreateNewPlayer()
 	{
-		GameObject newPlayerObj = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+		var newPlayerObj = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
 		newPlayerObj.name = "player " + Services.Players.Count;
-		var newPlayer = newPlayerObj.AddComponent<Player>();
-		Services.Players.Add(newPlayer);
 	}
 
 	// Update is called once per frame

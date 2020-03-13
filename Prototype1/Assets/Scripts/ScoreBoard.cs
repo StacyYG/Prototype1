@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,32 +8,43 @@ using TMPro;
 
 public class ScoreBoard : MonoBehaviour
 {
+	public int currentHeight;
 	public int score;
-	public int highScore;
 	private Text scoreText;
+	private Transform _currentPlayer;
 
 	// Use this for initialization
-	void Start ()
+	private void Start ()
 	{
 		scoreText = GetComponent<Text>();
+		Services.EventManager.Register<NewPlayerBorn>(OnNewPlayerBorn);
+		_currentPlayer = Services.Players.Last().transform;
 	}
 
-	void Update()
+	private void OnDestroy()
+	{
+		Services.EventManager.Unregister<NewPlayerBorn>(OnNewPlayerBorn);
+	}
+
+	private void Update()
 	{
 		if (Services.Players.Count == 0) return;
-		scoreText.text = "CURRENT HEIGHT:\t" + score + "\nSCORE:\t" + GetHighScore() + "\nRECORD:\t" + SaveData.Instance.Record;
+		SetScores();
+		scoreText.text = "CURRENT HEIGHT:\t" + currentHeight + "\nSCORE:\t" + score + "\nRECORD:\t" + SaveData.Instance.Record;
 		
 	}
 
-	public int GetHighScore()
+	public void SetScores()
 	{
-		var currentPlayer = Services.Players.Last();
-		score = (int) currentPlayer.transform.position.y;
-		if (score >= highScore)
+		currentHeight = (int) _currentPlayer.position.y;
+		if (score < currentHeight)
 		{
-			highScore = score;
+			score = currentHeight;
 		}
+	}
 
-		return highScore;
+	private void OnNewPlayerBorn(AGPEvent e)
+	{
+		_currentPlayer = Services.Players.Last().transform;
 	}
 }

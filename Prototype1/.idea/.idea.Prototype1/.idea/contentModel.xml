@@ -22,6 +22,10 @@
           <e p="Services.cs" t="Include" />
           <e p="TreeGrowControl.cs" t="Include" />
           <e p="TrunkGrowth.cs" t="Include" />
+          <e p="Utilities" t="Include">
+            <e p="EventManager.cs" t="Include" />
+            <e p="SimpleJSON.cs" t="Include" />
+          </e>
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />
