@@ -12,7 +12,8 @@ public class ScoreBoard : MonoBehaviour
 	public int score;
 	private Text scoreText;
 	private Transform _currentPlayer;
-
+	private bool _isWeb = true;
+	
 	// Use this for initialization
 	private void Start ()
 	{
@@ -30,7 +31,14 @@ public class ScoreBoard : MonoBehaviour
 	{
 		if (Services.Players.Count == 0) return;
 		SetScores();
-		scoreText.text = "CURRENT HEIGHT:\t" + currentHeight + "\nSCORE:\t" + score + "\nRECORD:\t" + SaveData.Instance.Record;
+		if (_isWeb)
+		{
+			scoreText.text = "CURRENT HEIGHT:\t" + currentHeight + "\nSCORE:\t" + score + "\nRECORD:\t" + SaveDataWeb.Instance.Record;
+		}
+		else
+		{
+			scoreText.text = "CURRENT HEIGHT:\t" + currentHeight + "\nSCORE:\t" + score + "\nRECORD:\t" + SaveData.Instance.Record;
+		}
 		
 	}
 
