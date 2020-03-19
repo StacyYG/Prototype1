@@ -8,10 +8,8 @@
       <e p="Assets" t="Include">
         <e p="DataFile.txt" t="Include" />
         <e p="Scripts" t="Include">
-          <e p="BranchGrowth.cs" t="Include" />
           <e p="CameraController.cs" t="Include" />
           <e p="Control.cs" t="Include" />
-          <e p="EasingFunctions.cs" t="Include" />
           <e p="Growth.cs" t="Include" />
           <e p="Player.cs" t="Include" />
           <e p="PrintLastWords.cs" t="Include" />
@@ -22,8 +20,8 @@
           <e p="SelfDestructor.cs" t="Include" />
           <e p="Services.cs" t="Include" />
           <e p="TreeGrowControl.cs" t="Include" />
-          <e p="TrunkGrowth.cs" t="Include" />
           <e p="Utilities" t="Include">
+            <e p="EasingFunctions.cs" t="Include" />
             <e p="EventManager.cs" t="Include" />
             <e p="SimpleJSON.cs" t="Include" />
           </e>

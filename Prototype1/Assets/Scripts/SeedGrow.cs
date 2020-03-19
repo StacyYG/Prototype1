@@ -21,6 +21,7 @@ public class SeedGrow : MonoBehaviour
 	private void GrowToTree()
 	{
 		var newTree = new GameObject();
+		newTree.name = "tree";
 		newTree.transform.position = transform.position;
 		newTree.AddComponent<TreeGrowControl>();
 		gameObject.transform.parent = newTree.transform;

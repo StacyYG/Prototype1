@@ -27,6 +27,7 @@ public class Control : MonoBehaviour
 	private void Start()
 	{
 		var newTree = new GameObject();
+		newTree.name = "tree";
 		newTree.transform.position = new Vector3(-1f, -10.5f, 0f);
 		newTree.AddComponent<TreeGrowControl>();
 
