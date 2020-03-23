@@ -38,6 +38,7 @@ public class Trunk : Growth
     public override void Start()
     {
         _thisGameObject.transform.localScale = startSize;
+        _thisGameObject.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     public override void Update()
@@ -58,7 +59,6 @@ public class Branch : Growth
     public override void Start()
     {
         _thisGameObject.transform.localScale = startSize;
-        _thisGameObject.AddComponent<BoxCollider2D>();
     }
 
     public override void Update()

@@ -75,6 +75,59 @@ public static class Services
         }
         set => _scoreBoard = value;
     }
+
+    public struct TreesBound
+    {
+        private static float _maxY;
+
+        public static float MaxY
+        {
+            get => _maxY;
+            set
+            {
+                if (value > _maxY)
+                {
+                    _maxY = value;
+                    Debug.Log("_maxY " + _maxY);
+                }
+            }
+        }
     
+        private static float _maxX;
+
+        public static float MaxX
+        {
+            get => _maxX;
+            set
+            {
+                if (value > _maxX)
+                {
+                    _maxX = value;
+                    Debug.Log("_maxX " + _maxX);
+                }
+            }
+        }
     
+        private static float _minX;
+
+        public static float MinX
+        {
+            get => _minX;
+            set
+            {
+                if (value < _minX)
+                {
+                    _minX = value;
+                    Debug.Log("_minX " + _minX);
+                }
+            }
+        }
+    }
+
+    public static void CompareWithTreesBound(Vector3 position)
+    {
+        TreesBound.MaxY = position.y;
+        TreesBound.MaxX = position.x;
+        TreesBound.MinX = position.x;
+    }
 }

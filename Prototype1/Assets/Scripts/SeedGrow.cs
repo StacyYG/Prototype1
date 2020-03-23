@@ -24,6 +24,7 @@ public class SeedGrow : MonoBehaviour
 		newTree.name = "tree";
 		newTree.transform.position = transform.position;
 		newTree.AddComponent<TreeGrowControl>();
+		Services.CompareWithTreesBound(newTree.transform.position);
 		gameObject.transform.parent = newTree.transform;
 	}
 

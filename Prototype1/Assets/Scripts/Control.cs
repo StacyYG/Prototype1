@@ -28,9 +28,9 @@ public class Control : MonoBehaviour
 	{
 		var newTree = new GameObject();
 		newTree.name = "tree";
-		newTree.transform.position = new Vector3(-1f, -10.5f, 0f);
+		newTree.transform.position = new Vector3(-1f, -4f, 0f);
 		newTree.AddComponent<TreeGrowControl>();
-
+		Services.CompareWithTreesBound(newTree.transform.position);
 	}
 
 	private void CreateNewPlayer()
@@ -61,3 +61,4 @@ public class Control : MonoBehaviour
 		SceneManager.LoadScene(0);
 	}
 }
+

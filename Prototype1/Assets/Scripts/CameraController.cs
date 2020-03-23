@@ -2,24 +2,26 @@
 using UnityEngine;
 using System.Collections;
 using System.Linq;
+using UnityEngine.Serialization;
 
 public class CameraController : MonoBehaviour {
 
-	private Transform player;
-	public Vector2 Margin;
+	private Transform _player;
+	public Vector2 margin;
 	public Vector2 smoothing;
-	
-	private Vector3 _min;
-	private Vector3 _max;
 
-	public bool IsFollowing;
+	public bool isFollowing;
+
+	private float _halfHeight;
+	private float _halfWidth;
 	
 	private void Start()
 	{
-		IsFollowing = true;
-		player = Services.Players.Last().transform;
+		isFollowing = true;
+		_player = Services.Players.Last().transform;
 		Services.EventManager.Register<NewPlayerBorn>(OnNewPlayerBorn);
-
+		_halfHeight = GetComponent<Camera>().orthographicSize;
+		_halfWidth = _halfHeight * Screen.width / Screen.height;
 	}
 	
 	private void OnDestroy()
@@ -29,22 +31,28 @@ public class CameraController : MonoBehaviour {
 
 	private void Update()
 	{
-		var x = transform.position.x;
-		var y = transform.position.y;
-		if (IsFollowing) {
-			if (Mathf.Abs (x - player.position.x) > Margin.x) {
-				x = Mathf.Lerp (x,player.position.x,smoothing.x*Time.deltaTime);
+		var currentPos = transform.position;
+		var x = currentPos.x;
+		var y = currentPos.y;
+		if (isFollowing) {
+			if (Mathf.Abs (x - _player.position.x) > margin.x) {
+				x = Mathf.Lerp (x,_player.position.x,smoothing.x*Time.deltaTime);
 			}
-			if (Mathf.Abs (y - player.position.y)> Margin.y) {
-				y = Mathf.Lerp (y,player.position.y,smoothing.y*Time.deltaTime);
+			if (Mathf.Abs (y - _player.position.y)> margin.y) {
+				y = Mathf.Lerp (y,_player.position.y,smoothing.y*Time.deltaTime);
 			}
 		}
 
-		transform.position = new Vector3 (x,y,transform.position.z);
+		transform.position = new Vector3(x, y, currentPos.z);
 	}
 
 	private void OnNewPlayerBorn(AGPEvent e)
 	{
-		player = Services.Players.Last().transform;
+		_player = Services.Players.Last().transform;
+	}
+
+	private void ZoomOut()
+	{
+		
 	}
 }

@@ -6,18 +6,20 @@ using System.Linq;
 
 public class Player : MonoBehaviour
 {
-	private Rigidbody2D _rigidBody;
+	private Rigidbody2D _rb;
 	private SpriteRenderer _spriteRenderer;
 	private int _jumpTimes;
 	private int _maxJumpTimes = 2;
-	private float _jumpForce = 700f;
-	private float _horizontalMultiplier = 4000f;
-	private float _maxSpeedX = 12f;
+	private float _jumpForce = 450f;
+	private float _horizontalMultiplier = 2500f;
+	private float _maxSpeedX = 5f;
 	private float _playerGrowMultiplier = 0.1f;
 	public bool isAlive = true;
 	public bool hasSeed = true;
 	public bool hasLastWords = true;
 	private int _velocityLastFrame;
+	private Vector2 _lastVelocity;
+	private Vector2 _smoothing = new Vector2(1f, 1f);
 
 	private void Awake()
 	{
@@ -26,7 +28,7 @@ public class Player : MonoBehaviour
 
 	private void Start()
 	{
-		_rigidBody = GetComponent<Rigidbody2D>();
+		_rb = GetComponent<Rigidbody2D>();
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		StartCoroutine(WaitAndGiveBirth(Services.Control.giveBirthInterval));
 	}
@@ -43,56 +45,49 @@ public class Player : MonoBehaviour
 				gameObject.transform.localScale += _playerGrowMultiplier * Time.deltaTime * Vector3.one;
 			}
 		}
-		
 	}
 
 	private void RespondToMovement()
 	{
-		
+		var currentV = _rb.velocity;
 		if (Input.GetKeyDown(KeyCode.Space) && _jumpTimes < _maxJumpTimes)
 		{
-			_rigidBody.AddForce(Vector2.up * _jumpForce);
+			_rb.velocity = new Vector2(currentV.x, 0f);
+			_rb.AddForce(Vector2.up * _jumpForce);
 			_jumpTimes++;
 		}
 
 		var forcePerFrame = _horizontalMultiplier * Time.deltaTime;
-		var velocityY = _rigidBody.velocity.y;
-		
+
 		if (Input.GetKey(KeyCode.A))
 		{
-			if (_velocityLastFrame == -1)
+			if (currentV.x <= 0)
 			{
-				_rigidBody.AddForce(Vector2.left * forcePerFrame);
+				if (Mathf.Abs(currentV.x) < _maxSpeedX)
+				{
+					_rb.AddForce(Vector2.left * forcePerFrame);
+				}
 			}
 			else
 			{
-				_rigidBody.velocity = new Vector2(0, velocityY);
-				_rigidBody.AddForce(Vector2.left * forcePerFrame);
+				_rb.velocity = new Vector2(0, currentV.y);
 			}
-			
-			_velocityLastFrame = -1;
 		}
 
 		if (Input.GetKey(KeyCode.D))
 		{
-			if (_velocityLastFrame == 1)
+			if (currentV.x >= 0)
 			{
-				_rigidBody.AddForce(Vector2.right * forcePerFrame);
+				if (Mathf.Abs(currentV.x) < _maxSpeedX)
+				{
+					_rb.AddForce(Vector2.right * forcePerFrame);
+				}
 			}
 			else
 			{
-				_rigidBody.velocity = new Vector2(0,velocityY);
-				_rigidBody.AddForce(Vector2.right * forcePerFrame);
+				_rb.velocity = new Vector2(0, currentV.y);
 			}
-			
-			_velocityLastFrame = 1;
 		}
-		
-		float velocityX = _rigidBody.velocity.x;
-		float clampedVelocityX;
-		clampedVelocityX = Mathf.Clamp(velocityX, -_maxSpeedX, _maxSpeedX);
-		_rigidBody.velocity = new Vector2(clampedVelocityX, velocityY);
-
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
@@ -110,12 +105,11 @@ public class Player : MonoBehaviour
 			_jumpTimes = 0;
 			if ((!isAlive) && hasLastWords)
 			{
-				Instantiate(Resources.Load<GameObject>("Prefabs/lastWords"), transform.position + new Vector3(0,2,0), Quaternion.identity);
+				Instantiate(Resources.Load<GameObject>("Prefabs/lastWords"),
+					transform.position + new Vector3(0, 0.6f, 0), Quaternion.identity, transform);
 				hasLastWords = false;
 			}
 		}
-
-		
 	}
 
 	private void Die()

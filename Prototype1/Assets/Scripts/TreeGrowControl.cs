@@ -8,7 +8,7 @@ public class TreeGrowControl : MonoBehaviour
 {
     private int _growNewBranchInterval = 9;
     private int _stopGrowTime = 30;
-    private float _horizontalRange = 4;
+    private float _horizontalRange = 1.5f;
 
     private Vector2 _branchPosition;
     public bool isGrowing = true;
@@ -37,7 +37,7 @@ public class TreeGrowControl : MonoBehaviour
         trunkGrowth.Start();
         _growths.Add(trunkGrowth);
         branches.Add(_trunk);
-        _treeTopPosition = new Vector3(rootPosition.x, rootPosition.y + _trunk.transform.localScale.y * 2.5f - 0.2f, 0f);
+        _treeTopPosition = new Vector3(rootPosition.x, rootPosition.y + _trunk.transform.localScale.y - 0.2f, 0f);
         if (Services.Trees.Count == 0)
         {
             InstantiateBranch(_treeTopPosition, Vector3.right);
@@ -53,7 +53,7 @@ public class TreeGrowControl : MonoBehaviour
     void Update ()
     {
         var rootPosition = transform.position;
-        _treeTopPosition = new Vector3(rootPosition.x, rootPosition.y + _trunk.transform.localScale.y * 2.5f - 0.2f, 0f);
+        _treeTopPosition = new Vector3(rootPosition.x, rootPosition.y + _trunk.transform.localScale.y - 0.2f, 0f);
         foreach (var growth in _growths)
         {
             growth.Update();

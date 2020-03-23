@@ -48,6 +48,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -59,6 +60,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -94,9 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0056311bafde3344abe7e872b35fe8be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tree: {fileID: 323309530189914185, guid: b7bcfd524327a764a90c35b16ed56e22, type: 3}
-  treeRotate: {fileID: 5854478339054917098, guid: 83462445b0ecaa348ad2eab045a7e852,
-    type: 3}
 --- !u!60 &60921800962347720
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -114,7 +113,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.12, y: 0.97}
+    oldSize: {x: 0.32, y: 0.28}
     newSize: {x: 1.12, y: 0.97}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -122,19 +121,14 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.29, y: 0.035}
-      - {x: 0.099999994, y: 0.36499998}
-      - {x: 0.03, y: 0.48499998}
-      - {x: -0.03, y: 0.48499998}
-      - {x: -0.08, y: 0.415}
-      - {x: -0.17999999, y: 0.225}
-      - {x: -0.26, y: 0.085}
-      - {x: -0.32999998, y: -0.035}
-      - {x: -0.56, y: -0.435}
-      - {x: -0.56, y: -0.48499998}
-      - {x: 0.56, y: -0.48499998}
-      - {x: 0.56, y: -0.445}
-      - {x: 0.55, y: -0.415}
+    - - {x: -0.03, y: 0.14}
+      - {x: -0.14, y: 0.01}
+      - {x: -0.16, y: -0.07}
+      - {x: -0.16, y: -0.14}
+      - {x: 0.16, y: -0.14}
+      - {x: 0.16, y: -0.049999997}
+      - {x: 0.14, y: 0.02}
+      - {x: 0.02, y: 0.14}
 --- !u!50 &50651407991670934
 Rigidbody2D:
   serializedVersion: 4
