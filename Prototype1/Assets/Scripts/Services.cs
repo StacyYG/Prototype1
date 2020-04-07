@@ -88,7 +88,6 @@ public static class Services
                 if (value > _maxY)
                 {
                     _maxY = value;
-                    Debug.Log("_maxY " + _maxY);
                 }
             }
         }
@@ -103,11 +102,10 @@ public static class Services
                 if (value > _maxX)
                 {
                     _maxX = value;
-                    Debug.Log("_maxX " + _maxX);
                 }
             }
         }
-    
+
         private static float _minX;
 
         public static float MinX
@@ -118,16 +116,50 @@ public static class Services
                 if (value < _minX)
                 {
                     _minX = value;
-                    Debug.Log("_minX " + _minX);
                 }
             }
         }
+        
+        private static float _minY;
+
+        public static float MinY
+        {
+            get => _minY;
+            set
+            {
+                if (value < _minY)
+                {
+                    _minY = value;
+                }
+            }
+        }
+        
+        public static float Width
+        {
+            get => _maxX - _minX;
+        }
+
+        public static float Height
+        {
+            get => _maxY - _minY;
+        }
+
+        public static Vector2 MidPoint
+        {
+            get => new Vector2((_maxX + _minX) / 2f, (_maxY + _minY) / 2f);
+        }
+        public static void ResetTreesBound()
+        {
+            _maxX = _minX = _maxY = _minY = 0f;
+        }
     }
 
-    public static void CompareWithTreesBound(Vector3 position)
+    public static void CompareWithTreesBound(Vector2 position)
     {
         TreesBound.MaxY = position.y;
+        TreesBound.MinY = position.y;
         TreesBound.MaxX = position.x;
         TreesBound.MinX = position.x;
     }
+    
 }

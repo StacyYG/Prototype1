@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 
 public class TreeGrowControl : MonoBehaviour
 {
+    public GameObject unitBranch;
+    public GameObject leavesParticle;
     private int _growNewBranchInterval = 9;
     private int _stopGrowTime = 30;
     private float _horizontalRange = 1.5f;
@@ -20,7 +22,7 @@ public class TreeGrowControl : MonoBehaviour
     
     
     // Use this for initialization
-    public void Awake ()
+    public void Start ()
     {
         branches = new List<GameObject>();
         _growths = new List<Growth>();
@@ -31,7 +33,7 @@ public class TreeGrowControl : MonoBehaviour
     public void CreateNewTree()
     {
         var rootPosition = transform.position;
-        _trunk = Instantiate(Resources.Load<GameObject>("Prefabs/unitBranch"), rootPosition, Quaternion.identity,
+        _trunk = Instantiate(unitBranch, rootPosition, Quaternion.identity,
             transform);
         var trunkGrowth = new Trunk(_trunk, this);
         trunkGrowth.Start();
@@ -64,6 +66,7 @@ public class TreeGrowControl : MonoBehaviour
     {
         var random = Random.Range(-_horizontalRange, _horizontalRange);
         _branchPosition = _treeTopPosition + new Vector3(random,0);
+        Services.CompareWithTreesBound(_branchPosition);
         if (random > 0)
         {
             InstantiateBranch(_branchPosition, Vector3.right);
@@ -77,9 +80,9 @@ public class TreeGrowControl : MonoBehaviour
 
     private void InstantiateBranch(Vector3 position, Vector3 direction)
     {
-        var branch = Instantiate(Resources.Load<GameObject>("Prefabs/unitBranch"), position, Quaternion.identity,
+        var branch = Instantiate(unitBranch, position, Quaternion.identity,
             transform);
-        var leaves = Instantiate(Resources.Load<GameObject>("Prefabs/leavesParticle"), position, Quaternion.identity,
+        Instantiate(leavesParticle, position, Quaternion.identity,
             branch.transform);
         branch.transform.up = direction;
         branch.tag = "branch";

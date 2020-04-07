@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0056311bafde3344abe7e872b35fe8be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  newTree: {fileID: 7027940258566429923, guid: 7b331f02e3ac8ab49ae345d84e64fdda, type: 3}
 --- !u!60 &60921800962347720
 PolygonCollider2D:
   m_ObjectHideFlags: 0

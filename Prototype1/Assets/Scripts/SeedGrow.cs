@@ -5,6 +5,7 @@ using UnityEngine;
 public class SeedGrow : MonoBehaviour
 {
 	private float sproutTime = 5f;
+	public GameObject newTree;
 
 	// Use this for initialization
 	void Start ()
@@ -20,12 +21,9 @@ public class SeedGrow : MonoBehaviour
 
 	private void GrowToTree()
 	{
-		var newTree = new GameObject();
-		newTree.name = "tree";
-		newTree.transform.position = transform.position;
-		newTree.AddComponent<TreeGrowControl>();
-		Services.CompareWithTreesBound(newTree.transform.position);
-		gameObject.transform.parent = newTree.transform;
+		var pos = transform.position;
+		var tree = Instantiate(newTree, pos, Quaternion.identity);
+		transform.parent = tree.transform;
 	}
 
 	private IEnumerator WaitAndGrowToTree(float waitTime)
