@@ -23,7 +23,7 @@ public class SeedGrow : MonoBehaviour
 	{
 		var pos = transform.position;
 		var tree = Instantiate(newTree, pos, Quaternion.identity);
-		transform.parent = tree.transform;
+		Destroy(gameObject);
 	}
 
 	private IEnumerator WaitAndGrowToTree(float waitTime)
