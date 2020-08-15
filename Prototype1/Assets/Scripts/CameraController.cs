@@ -15,13 +15,9 @@ public class CameraController : MonoBehaviour {
 	private float _halfHeight;
 	private float _halfWidth;
 	private Camera _myCam;
-	private const float ZoomOutTime = 10f;
-	private float _interval = 0.005f;
-	public int _maxIndex;
 
 	private void Start()
 	{
-		_maxIndex = (int)(ZoomOutTime / _interval);
 		isFollowing = true;
 		_player = Services.Players.Last().transform;
 		Services.EventManager.Register<NewPlayerBorn>(OnNewPlayerBorn);

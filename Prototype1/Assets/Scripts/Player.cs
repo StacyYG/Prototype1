@@ -11,8 +11,8 @@ public class Player : MonoBehaviour
 	private int _jumpTimes;
 	private int _maxJumpTimes = 2;
 	private float _jumpForce = 450f;
-	private float _horizontalMultiplier = 2500f;
-	private float _maxSpeedX = 5f;
+	private float _horizontalMultiplier = 1500f;
+	private float _maxSpeedX = 7f;
 	private float _playerGrowMultiplier = 0.1f;
 	public bool isAlive = true;
 	public bool hasSeed = true;
