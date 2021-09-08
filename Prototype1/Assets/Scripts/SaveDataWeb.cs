@@ -5,25 +5,14 @@ using System.IO;
 
 public class SaveDataWeb : MonoBehaviour
 {
-    private int _record;
-    public int Record
-    {
-        get => _record;
-        set
-        {
-            if (_record < value)
-            {
-                _record = value;
-            }
-        }
-    }
+    public int Record { get; private set; }
 
-    public static SaveDataWeb Instance;
+    public static SaveDataWeb instance;
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -31,19 +20,12 @@ public class SaveDataWeb : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Record = Services.ScoreBoard.score;
-
-    }
-
     
+    private void Update()
+    {
+        if (Record < Services.ScoreBoard.Score)
+        {
+            Record = Services.ScoreBoard.Score;
+        }
+    }
 }

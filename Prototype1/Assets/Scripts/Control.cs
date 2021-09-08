@@ -1,75 +1,86 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Control : MonoBehaviour
 {
-	public readonly int giveBirthInterval = 9;
-	public readonly float playerStartSize = 0.3f;
-	public readonly float separateTime = 3f;
-	public GameObject newTree;
-	private Player _currentPlayer;
-	private GameObject _restartText;
-	public bool WaitForReload { get; private set; }
-
-	// Use this for initialization
+	#region Prefabs
+	
+	[Tooltip("Tree prefab")] public GameObject tree;
+	[Tooltip("Player prefab")] public GameObject player;
+	
+	#endregion
+	
+	private GameObject _endingText;
+	public bool GameOver { get; private set; } // if true, wait for game to reload
+	
 	private void Awake ()
 	{
+		// Initialize Service Locator
 		Services.Control = this;
 		Services.EventManager = new EventManager();
 		Services.Players = new List<Player>();
 		Services.CameraController = Camera.main.GetComponent<CameraController>();
-		Services.Trees = new List<TreeGrowControl>();
 		Services.ScoreBoard = GameObject.FindGameObjectWithTag("ScoreBoard").GetComponent<ScoreBoard>();
-		Services.TreesBound.ResetTreesBound();
-		_restartText = GameObject.FindGameObjectWithTag("RestartText");
-		_restartText.SetActive(false);
+		Services.treeCount = 0;
+		Services.TreeRange.Reset();
+		
+		// Set up Text GameObject
+		_endingText = FindObjectOfType<EndingText>().gameObject;
+		_endingText.SetActive(false);
 		
 		CreateNewPlayer();
 	}
 
 	private void Start()
 	{
-		var t = Instantiate(newTree, new Vector3(-1f, -4f, 0f), Quaternion.identity);
-		Services.CompareWithTreesBound(t.transform.position);
-		Services.EventManager.Register<NewPlayerBorn>(OnNewPlayerBorn);
+		var firstTree = Instantiate(tree, new Vector3(-1f, -4f, 0f), Quaternion.identity);
+		Services.TreeRange.Update(firstTree.transform.position);
 	}
 
 	private void CreateNewPlayer()
 	{
-		var newPlayerObj = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+		var newPlayerObj = Instantiate(player);
 		newPlayerObj.name = "player " + Services.Players.Count;
-		_currentPlayer = newPlayerObj.GetComponent<Player>();
+		Services.Players.Add(newPlayerObj.GetComponent<Player>());
 	}
-
-	// Update is called once per frame
+	
 	void Update ()
 	{
+		// Press R to reload
 		if (Input.GetKeyDown(KeyCode.R))
 		{
 			SceneManager.LoadScene(0);
 		}
 
-		if (Services.Players.Count == 0) return;
-		if (!_currentPlayer.isAlive)
+		if (Input.GetKey(KeyCode.Q))
 		{
-			WaitForReload = true;
-			_restartText.SetActive(true);
+			ShowConclusion(false);
 		}
-	}
 
-	private void OnDestroy()
-	{
-		Services.EventManager.Unregister<NewPlayerBorn>(OnNewPlayerBorn);
-	}
-
-	private void OnNewPlayerBorn(AGPEvent e)
-	{
-		_currentPlayer = Services.Players.Last();
+		if (Input.GetKeyUp(KeyCode.Q))
+		{
+			if (_endingText.activeSelf)
+			{
+				_endingText.SetActive(false);
+			}
+		}
 		
+		// If current player dies, game over
+		if (ReferenceEquals(Services.CurrentPlayer, null)) return;
+		if (Services.CurrentPlayer.isAlive) return;
+		GameOver = true;
+		ShowConclusion(true);
+	}
+
+	private void ShowConclusion(bool gameOver)
+	{
+		if (!_endingText.activeSelf)
+		{
+			_endingText.SetActive(true);
+			_endingText.GetComponent<EndingText>().Print(gameOver);
+		}
 	}
 }
 

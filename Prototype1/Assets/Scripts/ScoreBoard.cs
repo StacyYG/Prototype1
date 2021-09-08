@@ -8,51 +8,41 @@ using TMPro;
 
 public class ScoreBoard : MonoBehaviour
 {
-	public int currentHeight;
-	public int score;
-	private Text scoreText;
-	private Transform _currentPlayer;
-	private bool _isWeb = true;
-	
-	// Use this for initialization
+	[SerializeField] private bool isWeb = true;
+	public int Score { get; private set; }
+	private int _currentHeight;
+	private TextMeshProUGUI _scoreTMP;
+
 	private void Start ()
 	{
-		scoreText = GetComponent<Text>();
-		Services.EventManager.Register<NewPlayerBorn>(OnNewPlayerBorn);
-		_currentPlayer = Services.Players.Last().transform;
-	}
-
-	private void OnDestroy()
-	{
-		Services.EventManager.Unregister<NewPlayerBorn>(OnNewPlayerBorn);
+		_scoreTMP = GetComponent<TextMeshProUGUI>();
 	}
 
 	private void Update()
 	{
-		if (Services.Players.Count == 0) return;
-		SetScores();
-		if (_isWeb)
-		{
-			scoreText.text = "CURRENT HEIGHT:\t" + currentHeight + "\nSCORE:\t" + score + "\nRECORD:\t" + SaveDataWeb.Instance.Record;
-		}
-		else
-		{
-			scoreText.text = "CURRENT HEIGHT:\t" + currentHeight + "\nSCORE:\t" + score + "\nRECORD:\t" + SaveData.Instance.Record;
-		}
+		if (ReferenceEquals(Services.CurrentPlayer, null)) return;
 		
-	}
-
-	public void SetScores()
-	{
-		currentHeight = (int) _currentPlayer.position.y;
-		if (score < currentHeight)
+		SetScores(); 
+		// current height: current player Y
+		// score: largest height this play
+		// record: highest score across plays 
+		
+		if (isWeb) // played on browser
 		{
-			score = currentHeight;
+			_scoreTMP.text = $"Current height: {_currentHeight}\nScore: {Score}\nRecord: {SaveDataWeb.instance.Record}";
+		}
+		else // local save file
+		{
+			_scoreTMP.text = $"Current height: {_currentHeight}\nScore: {Score}\nRecord: {SaveData.instance.Record}";
 		}
 	}
 
-	private void OnNewPlayerBorn(AGPEvent e)
+	private void SetScores()
 	{
-		_currentPlayer = Services.Players.Last().transform;
+		_currentHeight = (int) Services.CurrentPlayer.transform.position.y;
+		if (Score < _currentHeight)
+		{
+			Score = _currentHeight;
+		}
 	}
 }

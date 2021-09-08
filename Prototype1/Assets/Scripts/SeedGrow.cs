@@ -1,22 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SeedGrow : MonoBehaviour
 {
 	private float sproutTime = 5f;
-	public GameObject newTree;
-
-	// Use this for initialization
+	[SerializeField] private GameObject newTree;
+	
 	void Start ()
 	{
-		StartCoroutine(WaitAndGrowToTree(sproutTime));
-	}
-	
-
-	// Update is called once per frame
-	void Update () {
-		
+		StartCoroutine(GrowToTree(sproutTime));
 	}
 
 	private void GrowToTree()
@@ -26,7 +18,7 @@ public class SeedGrow : MonoBehaviour
 		Destroy(gameObject);
 	}
 
-	private IEnumerator WaitAndGrowToTree(float waitTime)
+	private IEnumerator GrowToTree(float waitTime)
 	{
 		yield return new WaitForSeconds(waitTime);
 		GrowToTree();

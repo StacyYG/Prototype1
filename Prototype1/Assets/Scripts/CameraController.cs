@@ -1,91 +1,93 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using System.Linq;
-using UnityEngine.Serialization;
 
-public class CameraController : MonoBehaviour {
-
-	private Transform _player;
-	public Vector2 margin;
-	public Vector2 smoothing;
-
-	public bool isFollowing;
+public class CameraController : MonoBehaviour 
+{
+	[SerializeField] private Vector2 posSmoothing;
+	[SerializeField] private float sizeSmoothing;
+	[SerializeField] private bool isFollowing = true;
 
 	private float _halfHeight;
 	private float _halfWidth;
 	private Camera _myCam;
-
+	private Transform _player;
+	
 	private void Start()
 	{
-		isFollowing = true;
+		// Camera follows the last player. Update the target player everytime a new player is born
 		_player = Services.Players.Last().transform;
-		Services.EventManager.Register<NewPlayerBorn>(OnNewPlayerBorn);
+		Services.EventManager.Register<PlayerBorn>(OnNewPlayerBorn);
+		
 		_myCam = GetComponent<Camera>();
 		_halfHeight = _myCam.orthographicSize;
 		_halfWidth = _halfHeight * Screen.width / Screen.height;
-		Services.CompareWithTreesBound(new Vector2(0f, -_halfHeight));
-	}
-	
-	private void OnDestroy()
-	{
-		Services.EventManager.Unregister<NewPlayerBorn>(OnNewPlayerBorn);
+		
+		// Make the tree range cover some space below the trees just to look better when zoomed out
+		Services.TreeRange.Update(new Vector2(0f, -_halfHeight));
 	}
 
 	private void Update()
 	{
-		var currentPos = transform.position;
-		var x = currentPos.x;
-		var y = currentPos.y;
-		if (isFollowing) {
-			if (Mathf.Abs (x - _player.position.x) > margin.x)
-			{
-				x = Mathf.Lerp(x, _player.position.x, smoothing.x * Time.deltaTime);
-			}
-			if (Mathf.Abs (y - _player.position.y)> margin.y)
-			{
-				y = Mathf.Lerp(y, _player.position.y, smoothing.y * Time.deltaTime);
-			}
+		// Lerp
+		if (isFollowing)
+		{
+			LerpCameraPosition(_player.position, Time.deltaTime * posSmoothing);
+			LerpCameraSize(_halfHeight, sizeSmoothing * Time.deltaTime);
 		}
 
-		transform.position = new Vector3(x, y, currentPos.z);
-		
-		if (Input.GetKey(KeyCode.I) || Services.Control.WaitForReload)
+		// Zoom out when holding Q key or when game over
+		if (Input.GetKey(KeyCode.Q) || Services.Control.GameOver)
 		{
 			isFollowing = false;
 			ZoomOut();
+			
+			// All players say some happy words when the camera zooms out
+			foreach (var player in Services.Players)
+			{
+				player.SayHappyWords();
+			}
 		}
 
-		if (Input.GetKeyUp(KeyCode.I))
+		// Resume from zoom-out mode when letting go the Q key
+		if (Input.GetKeyUp(KeyCode.Q))
 		{
-			_myCam.orthographicSize = _halfHeight;
-			var playerPos = _player.position;
-			_myCam.transform.position = new Vector3(playerPos.x, playerPos.y, currentPos.z);
 			isFollowing = true;
 		}
-		
 	}
 
-	private void OnNewPlayerBorn(AGPEvent e)
+	private void LerpCameraPosition(Vector2 targetPosition, Vector2 stepPos)
 	{
-		_player = Services.Players.Last().transform;
+		var x = Mathf.Lerp(transform.position.x, targetPosition.x, stepPos.x);
+		var y = Mathf.Lerp(transform.position.y, targetPosition.y, stepPos.y);
+		transform.position = new Vector3(x, y, transform.position.z);
 	}
 
-	private void LerpCameraSizeAndPosition(float stepCamSize, float stepPosX, float stepPosY)
+	private void LerpCameraSize(float targetSize, float stepCamSize)
 	{
-		var xRatio = Services.TreesBound.Width / (_halfWidth * 2f);
-		var yRatio = Services.TreesBound.Height / (_halfHeight * 2f);
-		var maxRatio = Mathf.Max(xRatio, yRatio);
-		var endPos = Services.TreesBound.MidPoint;
-		
-		_myCam.orthographicSize = Mathf.Lerp(_myCam.orthographicSize, _halfHeight * maxRatio, stepCamSize);
-		var currentPos = transform.position;
-		var x = Mathf.Lerp(currentPos.x, endPos.x, stepPosX);
-		var y = Mathf.Lerp(currentPos.y, endPos.y, stepPosY);
-		transform.position = new Vector3(x, y, currentPos.z);
+		_myCam.orthographicSize = Mathf.Lerp(_myCam.orthographicSize, targetSize, stepCamSize);
 	}
+
+	private float ZoomOutRatio()
+	{
+		var xRatio = Services.TreeRange.Width / (_halfWidth * 2f);
+		var yRatio = Services.TreeRange.Height / (_halfHeight * 2f);
+		return Mathf.Max(xRatio, yRatio); // Make sure all the trees are covered in the zoom-out view
+	}
+
 	private void ZoomOut()
 	{
-		LerpCameraSizeAndPosition(smoothing.y * Time.deltaTime, smoothing.x * Time.deltaTime, smoothing.y * Time.deltaTime);
+		LerpCameraSize(_halfHeight * ZoomOutRatio(), sizeSmoothing * Time.deltaTime); // Zoom out the camera to cover all the trees
+		LerpCameraPosition(Services.TreeRange.MidPoint,
+			Time.deltaTime * posSmoothing); // Move the camera to the center of all the trees
+	}
+	
+	private void OnNewPlayerBorn(AGPEvent e)
+	{
+		_player = Services.CurrentPlayer.transform;
+	}
+	
+	private void OnDestroy()
+	{
+		Services.EventManager.Unregister<PlayerBorn>(OnNewPlayerBorn);
 	}
 }

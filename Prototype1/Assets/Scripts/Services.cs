@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class Services
@@ -27,6 +27,8 @@ public static class Services
         }
         set => _players = value; 
     }
+    
+    public static Player CurrentPlayer => Players.Last();
 
     private static CameraController _cameraController;
 
@@ -52,17 +54,7 @@ public static class Services
         set => _control = value;
     }
 
-    private static List<TreeGrowControl> _trees;
-
-    public static List<TreeGrowControl> Trees
-    {
-        get
-        {
-            Debug.Assert(_trees != null);
-            return _trees;
-        }
-        set => _trees = value;
-    }
+    public static int treeCount;
 
     private static ScoreBoard _scoreBoard;
 
@@ -76,63 +68,12 @@ public static class Services
         set => _scoreBoard = value;
     }
 
-    public struct TreesBound
+    public struct TreeRange
     {
-        private static float _maxY;
+        private static float _maxY, _minY, _maxX, _minX;
 
-        public static float MaxY
-        {
-            get => _maxY;
-            set
-            {
-                if (value > _maxY)
-                {
-                    _maxY = value;
-                }
-            }
-        }
-    
-        private static float _maxX;
-
-        public static float MaxX
-        {
-            get => _maxX;
-            set
-            {
-                if (value > _maxX)
-                {
-                    _maxX = value;
-                }
-            }
-        }
-
-        private static float _minX;
-
-        public static float MinX
-        {
-            get => _minX;
-            set
-            {
-                if (value < _minX)
-                {
-                    _minX = value;
-                }
-            }
-        }
-        
-        private static float _minY;
-
-        public static float MinY
-        {
-            get => _minY;
-            set
-            {
-                if (value < _minY)
-                {
-                    _minY = value;
-                }
-            }
-        }
+        private static float TopBorderY => _maxY + 10f; // Include some space above the trees to look nicer
+        private static float LowBorderY => _minY;
         
         public static float Width
         {
@@ -141,25 +82,33 @@ public static class Services
 
         public static float Height
         {
-            get => _maxY - _minY;
+            get => TopBorderY - LowBorderY;
         }
 
         public static Vector2 MidPoint
         {
-            get => new Vector2((_maxX + _minX) / 2f, (_maxY + _minY) / 2f);
+            get => new Vector2((_maxX + _minX) / 2f, (TopBorderY + LowBorderY) / 2f);
         }
-        public static void ResetTreesBound()
+        
+        public static void Reset()
         {
-            _maxX = _minX = _maxY = _minY = 0f;
+            _maxX = 0f;
+            _minX = 0f;
+            _maxY = 0f;
+            _minY = 0f;
+        }
+        
+        public static void Update(Vector2 position)
+        {
+            if (_maxX < position.x)
+                _maxX = position.x;
+            else if (_minX > position.x)
+                _minX = position.x;
+
+            if (_maxY < position.y)
+                _maxY = position.y;
+            else if (_minY > position.y)
+                _minY = position.y;
         }
     }
-
-    public static void CompareWithTreesBound(Vector2 position)
-    {
-        TreesBound.MaxY = position.y;
-        TreesBound.MinY = position.y;
-        TreesBound.MaxX = position.x;
-        TreesBound.MinX = position.x;
-    }
-    
 }

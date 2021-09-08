@@ -8,6 +8,7 @@ TagManager:
   - branch
   - ScoreBoard
   - RestartText
+  - deadPlayer
   layers:
   - Default
   - TransparentFX
